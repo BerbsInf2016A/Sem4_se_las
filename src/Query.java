@@ -57,8 +57,6 @@ public class Query implements  IQuery {
     public List<Integer> executeSQL06(List<Record> records) {
         List<String> sources = Arrays.asList("a", "d");
         List<String> destinations = Arrays.asList("f", "e");
-        Comparator<Record> descendingWeightComparator = (Record record1 , Record record2) -> (int)(record2.getWeight() - record1.getWeight());
-        Comparator<Record> ascendingDestinationComparator = (Record record1 ,Record record2) -> (int)(record1.getDestination().compareTo(record2.getDestination()));
 
         return records.stream()
                 .filter(record -> sources.contains(record.getSource().toLowerCase()))
@@ -67,10 +65,7 @@ public class Query implements  IQuery {
                 .filter(record -> record.getWeight() >= 29)
                 .filter(record -> record.getCustoms().toLowerCase().equals("y"))
                 .filter(record -> record.getExtendedSecurityCheck().toLowerCase().equals("y"))
-                .sorted(ascendingDestinationComparator)
-                .collect(Collectors.toList())
-                .stream()
-                .sorted(descendingWeightComparator)
+                .sorted(Comparator.comparing(Record::getWeight).reversed().thenComparing(Record::getDestination))
                 .map(record -> record.getId()).collect(Collectors.toList());
     }
 
