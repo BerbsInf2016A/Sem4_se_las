@@ -221,8 +221,30 @@ public class Application {
     public void executeSQL10() {
     }
 
+    /**
+     --- query 11 (sum, where, not in, in, group by)
+     90 SELECT sorter,SUM(weight) FROM data WHERE source NOT IN ('a','c')
+     91 AND destination = 'h' AND sorter IN (1,3,5,6) AND customs = 'y'
+     92 AND extendedSecurityCheck = 'n' GROUP BY sorter
+     93 1 18755
+     94 3 18922
+     95 6 18739
+     96 5 19273
+     */
     // sum, where, not in, in, group by
+    @Test
     public void executeSQL11() {
+        Map<Integer, Integer> result = Query.instance.executeSQL11(this.loadRecords());
+
+        Map<Integer, Integer> expectedResult = new HashMap<Integer, Integer>()
+        {{
+            put(1, 18755);
+            put(3, 18922);
+            put(6, 18739);
+            put(5, 19273);
+        }};
+
+        Assert.assertEquals("Results should be the same", expectedResult, result);
     }
 
     // avg, where, in, in, group by

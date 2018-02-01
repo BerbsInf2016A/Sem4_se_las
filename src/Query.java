@@ -149,8 +149,37 @@ public class Query implements  IQuery {
     }
 
 
+    /**
+     * --- query 11 (sum, where, not in, in, group by)
+     90 SELECT sorter,SUM(weight) FROM data WHERE
+     source NOT IN ('a','c')
+     91 AND destination = 'h'
+     AND sorter IN (1,3,5,6)
+     AND customs = 'y'
+     92 AND extendedSecurityCheck = 'n'
+     GROUP BY sorter
+     93 1 18755
+     94 3 18922
+     95 6 18739
+     96 5 19273
+     * @param records
+     * @return
+     */
     public Map<Integer, Integer> executeSQL11(List<Record> records) {
-        return null;
+        Map<Integer, Integer> result = new HashMap<>();
+        List<Integer> sorters = Arrays.asList(1,3,5,6);
+        List<String> forbiddenSources = Arrays.asList("a", "c");
+
+        records.stream()
+                .filter(record -> !forbiddenSources.contains(record.getSource().toLowerCase()))
+                .filter(record -> record.getDestination().toLowerCase().equals("h"))
+                .filter(record -> sorters.contains(record.getSorter()))
+                .filter(record -> record.getCustoms().toLowerCase().equals("y"))
+                .filter(record -> record.getExtendedSecurityCheck().toLowerCase().equals("n"))
+                .collect(Collectors.groupingBy(Record::getSorter))
+                .forEach((k, v) -> result.put(k, v.stream().collect(Collectors.summingInt(record -> ((Integer)record.getWeight())))));
+
+        return result;
     }
 
 
