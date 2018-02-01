@@ -154,6 +154,32 @@ public class Application {
      */
     @Test
     public void executeSQL06() {
+        List<Record> records = loadRecords();
+        List<String> sources = Arrays.asList("a", "d");
+        List<String> destinations = Arrays.asList("f", "e");
+        Comparator<Record> descendingWeightComparator = (Record record1 ,Record record2) -> (int)(record2.getWeight() - record1.getWeight());
+        Comparator<Record> ascendingDestinationComparator = (Record record1 ,Record record2) -> (int)(record1.getDestination().compareTo(record2.getDestination()));
+
+        List<Record> data = records.stream()
+                .filter(record -> sources.contains(record.getSource().toLowerCase()))
+                .filter(record -> destinations.contains(record.getDestination().toLowerCase()))
+                .filter(record -> record.getType().toLowerCase().equals("b"))
+                .filter(record -> record.getWeight() >= 29)
+                .filter(record -> record.getCustoms().toLowerCase().equals("y"))
+                .filter(record -> record.getExtendedSecurityCheck().toLowerCase().equals("y"))
+                .collect(Collectors.toList());
+
+        Collections.sort(data, descendingWeightComparator);
+        Collections.sort(data, ascendingDestinationComparator);
+        List<Integer> result = data.stream().map(record -> record.getId()).collect(Collectors.toList());
+
+        List<Integer> expectedResult = Arrays.asList(158036, 188829, 196332, 289290, 937204, 491565, 500654, 108316, 282370, 422002, 540879
+                ,563094, 625456, 685382, 252566, 495325);
+
+        Assert.assertEquals("Results should be the same", expectedResult, result);
+
+
+
     }
 
     // count, group by
