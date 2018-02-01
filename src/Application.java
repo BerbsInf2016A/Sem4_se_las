@@ -115,18 +115,19 @@ public class Application {
         List<Record> records = loadRecords();
         Comparator<Record> descendingByWeight = (Record record1, Record record2) -> (record2.getWeight() - record1.getWeight());
 
-        List<Record> orderByWeight = records.stream()
+        List<Integer> idsOrderByWeightDescendingLimit3 = records.stream()
                 .filter(record -> record.getSource().toLowerCase().equals("b") || record.getSource().toLowerCase().equals("c"))
                 .filter(record -> record.getDestination().toLowerCase().equals("g"))
                 .filter(record -> record.getType().toLowerCase().equals("n"))
                 .filter(record -> record.getSorter() <= 5)
                 .filter(record -> record.getCustoms().toLowerCase().equals("y"))
                 .filter(record -> record.getExtendedSecurityCheck().toLowerCase().equals("y"))
+                .sorted(descendingByWeight)
+                .map(record -> record.getId())
+                .limit(3)
                 .collect(Collectors.toList());
-        Collections.sort(orderByWeight, descendingByWeight);
-        List<Integer> idsOrderByWeightDescLimit3 = orderByWeight.stream().map(record -> record.getId()).limit(3).collect(Collectors.toList());
 
-        Assert.assertEquals("Elements should be the same with the same order",Arrays.asList(357530,59471,136168), idsOrderByWeightDescLimit3);
+        Assert.assertEquals("Elements should be the same with the same order",Arrays.asList(357530,59471,136168), idsOrderByWeightDescendingLimit3);
     }
 
     /*
