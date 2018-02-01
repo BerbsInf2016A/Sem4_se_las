@@ -5,7 +5,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Application {
 
@@ -48,7 +47,7 @@ public class Application {
          */
     @Test
     public void executeSQL01() {
-        long count = Query.instance.executeSQL01(loadRecords());
+        long count = Query.instance.executeSQL01(this.loadRecords());
 
         Assert.assertEquals("Count should be equal",1000000,  count);
     }
@@ -62,7 +61,7 @@ public class Application {
     // count, where
     @Test
     public void executeSQL02() {
-        long count = Query.instance.executeSQL02(loadRecords());
+        long count = Query.instance.executeSQL02(this.loadRecords());
         Assert.assertEquals("Count should be equal", 3123, count);
     }
 
@@ -74,7 +73,7 @@ public class Application {
      */
     @Test
     public void executeSQL03() {
-        long count = Query.instance.executeSQL03(loadRecords());
+        long count = Query.instance.executeSQL03(this.loadRecords());
 
         Assert.assertEquals("Count should be equal",3136,  count);
     }
@@ -88,7 +87,7 @@ public class Application {
     @Test
     public void executeSQL04() {
 
-        long count = Query.instance.executeSQL04(loadRecords());
+        long count = Query.instance.executeSQL04(this.loadRecords());
 
         Assert.assertEquals("Count should be equal",28246,  count);
     }
@@ -105,7 +104,7 @@ public class Application {
     @Test
     // id, where, in, order by desc limit
     public void executeSQL05() {
-        List<Integer> idsOrderByWeightDescendingLimit3 = Query.instance.executeSQL05(loadRecords());
+        List<Integer> idsOrderByWeightDescendingLimit3 = Query.instance.executeSQL05(this.loadRecords());
 
         Assert.assertEquals("Elements should be the same with the same order",Arrays.asList(357530,59471,136168), idsOrderByWeightDescendingLimit3);
     }
@@ -134,7 +133,7 @@ public class Application {
      */
     @Test
     public void executeSQL06() {
-        List<Integer> result = Query.instance.executeSQL06(loadRecords());
+        List<Integer> result = Query.instance.executeSQL06(this.loadRecords());
 
         List<Integer> expectedResult = Arrays.asList(158036, 188829, 196332, 289290, 937204, 491565, 500654, 108316, 282370, 422002, 540879
                 ,563094, 625456, 685382, 252566, 495325);
@@ -166,7 +165,7 @@ public class Application {
     // count, where, group by
     @Test
     public void executeSQL08() {
-        Map<Integer, Long> result = Query.instance.executeSQL08(loadRecords());
+        Map<Integer, Long> result = Query.instance.executeSQL08(this.loadRecords());
 
         Map<Integer, Long> expectedResult = new HashMap<Integer, Long>()
         {{
@@ -196,12 +195,26 @@ public class Application {
         expected.put("h", 1511L);
         expected.put("g", 1498L);
 
-        Assert.assertEquals(expected, result);
+        Assert.assertEquals("Should be equal", expected, result);
     }
 
-
-    // count, where, not in, group by
+    /*
+    82 --- query 10 (count, where, not in, group by)
+    83 SELECT extendedSecurityCheck,COUNT(*) FROM data WHERE source = 'a'
+    84 AND destination = 'f' AND type NOT IN ('b','e') AND customs = 'n'
+    85 AND sorter = 8 GROUP BY extendedSecurityCheck
+    86 n 2239
+    87 y 64
+     */
+    @Test
     public void executeSQL10() {
+
+        Map<String, Long> result = Query.instance.executeSQL10(this.loadRecords());
+        Map<String, Long> expected = new HashMap<>();
+        expected.put("n", 2239L);
+        expected.put("y", 64L);
+
+        Assert.assertEquals("Should be equal", expected, result);
     }
 
     // sum, where, not in, in, group by
