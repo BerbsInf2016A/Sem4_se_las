@@ -78,14 +78,46 @@ public class Application {
     17 AND type = 'n' AND customs = 'n'
     18 28246
      */
+    @Test
     public void executeSQL04() {
+        List<Record> records = loadRecords();
+        long count = records.stream()
+                .filter(record -> record.getSource().toLowerCase().equals("b"))
+                .filter(record -> !( record.getDestination().toLowerCase().equals("f") || record.getDestination().toLowerCase().equals("h") ) )
+                .filter(record -> record.getType().toLowerCase().equals("n"))
+                .filter(record -> record.getCustoms().toLowerCase().equals("n"))
+                .count();
+
+        Assert.assertEquals("Count should be equal",28246,  count);
     }
 
     // id, where, in, order by desc limit
     public void executeSQL05() {
     }
 
-    // id, where, in, order by desc, order by asc
+    /*
+    --- query 06 (id, where, in, order by desc, order by asc)
+    29 SELECT id FROM data WHERE source IN ('a','d') AND destination IN ('f','e')
+    30 AND type = 'b' AND weight >= 29 AND customs = 'y' AND extendedSecurityCheck = 'y'
+    31 ORDER BY weight DESC, destination
+    32 158036
+    33 188829
+    34 196332
+    35 289290
+    36 937204
+    37 491565
+    38 500654
+    39 108316
+    40 282370
+    41 422002
+    42 540879
+    43 563094
+    44 625456
+    45 685382
+    46 252566
+    47 495325
+     */
+    @Test
     public void executeSQL06() {
     }
 
