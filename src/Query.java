@@ -195,7 +195,7 @@ public class Query implements  IQuery {
                 .filter(record -> record.getCustoms().toLowerCase().equals("y"))
                 .filter(record -> record.getExtendedSecurityCheck().toLowerCase().equals("n"))
                 .collect(Collectors.groupingBy(Record::getSorter))
-                .forEach((k, v) -> result.put(k, v.stream().collect(Collectors.summingInt(record -> ((Integer)record.getWeight())))));
+                .forEach((k, v) -> result.put(k, v.stream().mapToInt(record -> (record.getWeight())).sum()));
 
         return result;
     }

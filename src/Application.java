@@ -40,16 +40,18 @@ public class Application {
         return data;
     }
 
-    /*
-        --- query 01 (count)
-        2 SELECT COUNT(*) FROM data
-        3 1000000
-         */
+    /**
+     * --- query 01 (count)
+     2 SELECT COUNT(*) FROM data
+     3 1000000
+     */
     @Test
     public void executeSQL01() {
-        long count = Query.instance.executeSQL01(this.loadRecords());
+        long result = Query.instance.executeSQL01(this.loadRecords());
 
-        Assert.assertEquals("Count should be equal",1000000,  count);
+        long expected = 1000000;
+
+        Assert.assertEquals("Count should be equal",expected,  result);
     }
 
     /**
@@ -61,8 +63,11 @@ public class Application {
     // count, where
     @Test
     public void executeSQL02() {
-        long count = Query.instance.executeSQL02(this.loadRecords());
-        Assert.assertEquals("Count should be equal", 3123, count);
+        long result = Query.instance.executeSQL02(this.loadRecords());
+
+        long expected = 3123;
+
+        Assert.assertEquals("Count should be equal", expected, result);
     }
 
     /*
@@ -73,9 +78,11 @@ public class Application {
      */
     @Test
     public void executeSQL03() {
-        long count = Query.instance.executeSQL03(this.loadRecords());
+        long result = Query.instance.executeSQL03(this.loadRecords());
 
-        Assert.assertEquals("Count should be equal",3136,  count);
+        long expected = 3136;
+
+        Assert.assertEquals("Count should be equal", expected, result);
     }
 
     /*
@@ -86,10 +93,11 @@ public class Application {
      */
     @Test
     public void executeSQL04() {
+        long result = Query.instance.executeSQL04(this.loadRecords());
 
-        long count = Query.instance.executeSQL04(this.loadRecords());
+        long expected = 28246;
 
-        Assert.assertEquals("Count should be equal",28246,  count);
+        Assert.assertEquals("Count should be equal", expected, result);
     }
 
     /*
@@ -104,9 +112,11 @@ public class Application {
     @Test
     // id, where, in, order by desc limit
     public void executeSQL05() {
-        List<Integer> idsOrderByWeightDescendingLimit3 = Query.instance.executeSQL05(this.loadRecords());
+        List<Integer> result = Query.instance.executeSQL05(this.loadRecords());
 
-        Assert.assertEquals("Elements should be the same with the same order",Arrays.asList(357530,59471,136168), idsOrderByWeightDescendingLimit3);
+        List<Integer> expected = Arrays.asList(357530,59471,136168);
+
+        Assert.assertEquals("Elements should be the same with the same order", expected, result);
     }
 
     /*
@@ -135,10 +145,10 @@ public class Application {
     public void executeSQL06() {
         List<Integer> result = Query.instance.executeSQL06(this.loadRecords());
 
-        List<Integer> expectedResult = Arrays.asList(158036, 188829, 196332, 289290, 937204, 491565, 500654, 108316, 282370, 422002, 540879
+        List<Integer> expected = Arrays.asList(158036, 188829, 196332, 289290, 937204, 491565, 500654, 108316, 282370, 422002, 540879
                 ,563094, 625456, 685382, 252566, 495325);
 
-        Assert.assertEquals("Results should be the same", expectedResult, result);
+        Assert.assertEquals("Results should be the same", expected, result);
     }
 
     /**
@@ -152,14 +162,13 @@ public class Application {
     public void executeSQL07() {
         Map<String, Long> result = Query.instance.executeSQL07(this.loadRecords());
 
-        Map<String, Long> expectedResult = new HashMap<String, Long>()
+        Map<String, Long> expected = new HashMap<String, Long>()
         {{
             put("n", 899935L);
             put("y", 100065L);
         }};
 
-
-        Assert.assertEquals("Results should be the same", expectedResult, result);
+        Assert.assertEquals("Results should be the same", expected, result);
     }
 
     /**
@@ -184,7 +193,7 @@ public class Application {
     public void executeSQL08() {
         Map<Integer, Long> result = Query.instance.executeSQL08(this.loadRecords());
 
-        Map<Integer, Long> expectedResult = new HashMap<Integer, Long>()
+        Map<Integer, Long> expected = new HashMap<Integer, Long>()
         {{
             put(1, 257L);
             put(11, 252L);
@@ -200,17 +209,19 @@ public class Application {
             put(10, 244L);
         }};
 
-        Assert.assertEquals("Results should be the same", expectedResult, result);
+        Assert.assertEquals("Results should be the same", expected, result);
     }
 
     @Test
     public void executeSQL09() {
         Map<String, Long> result = Query.instance.executeSQL09(this.loadRecords());
 
-        Map<String, Long> expected = new HashMap<>();
-        expected.put("f", 1513L);
-        expected.put("h", 1511L);
-        expected.put("g", 1498L);
+        Map<String, Long> expected = new HashMap<String, Long>()
+        {{
+            put("f", 1513L);
+            put("h", 1511L);
+            put("g", 1498L);
+        }};
 
         Assert.assertEquals("Should be equal", expected, result);
     }
@@ -225,11 +236,13 @@ public class Application {
      */
     @Test
     public void executeSQL10() {
-
         Map<String, Long> result = Query.instance.executeSQL10(this.loadRecords());
-        Map<String, Long> expected = new HashMap<>();
-        expected.put("n", 2239L);
-        expected.put("y", 64L);
+
+        Map<String, Long> expected = new HashMap<String, Long>()
+        {{
+            put("n", 2239L);
+            put("y", 64L);
+        }};
 
         Assert.assertEquals("Should be equal", expected, result);
     }
