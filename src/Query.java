@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Query implements  IQuery {
@@ -143,9 +144,26 @@ public class Query implements  IQuery {
         return result;
     }
 
-
+    /*
+    82 --- query 10 (count, where, not in, group by)
+    83 SELECT extendedSecurityCheck,COUNT(*) FROM data WHERE source = 'a'
+    84 AND destination = 'f' AND type NOT IN ('b','e') AND customs = 'n'
+    85 AND sorter = 8 GROUP BY extendedSecurityCheck
+    86 n 2239
+    87 y 64
+     */
     public Map<String, Long> executeSQL10(List<Record> records) {
-        return null;
+        Predicate<Record> notInBorE = record -> ! (record.getType().toLowerCase().equals("b") || record.getType().toLowerCase().equals("e"));
+        Map<String, Long> result = new HashMap<>();
+        records.stream()
+                .filter(record -> record.getSource().toLowerCase().equals("a"))
+                .filter(record -> record.getDestination().toLowerCase().equals("f"))
+                .filter(notInBorE)
+                .filter(record -> record.getCustoms().toLowerCase().equals("n"))
+                .filter(record -> record.getSorter() == 8)
+                .collect(Collectors.groupingBy(Record::getExtendedSecurityCheck))
+                .forEach((k,v) -> result.put(k,v.stream().count()));
+        return result;
     }
 
 
