@@ -74,13 +74,37 @@ public class Query implements  IQuery {
     }
 
     @Override
-    public void executeSQL07(List<Record> records) {
-        
+    public Map<String, Long> executeSQL07(List<Record> records) {
+        return null;
     }
 
 
-    public void executeSQL08(List<Record> records) {
-
+    /**
+     * --- query 08 (count, where, group by)
+     55 SELECT sorter,COUNT(*) FROM data WHERE customs = 'y' AND extendedSecurityCheck = 'y'
+     56 GROUP BY sorter
+     57 1 257
+     58 11 252
+     59 6 255
+     60 5 263
+     61 12 231
+     62 9 255
+     63 2 270
+     64 4 254
+     65 7 248
+     66 8 257
+     67 3 230
+     68 10 244
+     * @param records
+     */
+    public Map<Integer, Long> executeSQL08(List<Record> records) {
+        Map<Integer, Long> result = new HashMap<>();
+        records.stream()
+                .filter(record -> record.getCustoms().toLowerCase().equals("y"))
+                .filter(record -> record.getExtendedSecurityCheck().toLowerCase().equals("y"))
+                .collect(Collectors.groupingBy(Record::getSorter))
+                .forEach((k, v) -> result.put(k, v.stream().count()));
+        return result;
     }
 
     /*
@@ -108,26 +132,19 @@ public class Query implements  IQuery {
         return result;
     }
 
-    /*
-    --- query 10 (count, where, not in, group by)
-    83 SELECT extendedSecurityCheck,COUNT(*) FROM data WHERE source = 'a'
-    84 AND destination = 'f' AND type NOT IN ('b','e') AND customs = 'n'
-    85 AND sorter = 8 GROUP BY extendedSecurityCheck
-    86 n 2239
-    87 y 64
-     */
+
     public Map<String, Long> executeSQL10(List<Record> records) {
-
+        return null;
     }
 
-    @Override
-    public void executeSQL11(List<Record> records) {
 
+    public Map<Integer, Integer> executeSQL11(List<Record> records) {
+        return null;
     }
 
-    @Override
-    public void executeSQL12(List<Record> records) {
 
+    public Map<String, Integer> executeSQL12(List<Record> records) {
+        return null;
     }
 
 
