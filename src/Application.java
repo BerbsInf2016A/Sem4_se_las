@@ -1,18 +1,44 @@
+import org.junit.Assert;
+import org.junit.Test;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Application {
-    private List<Record> records = new ArrayList<>();
 
     public List<Record> loadRecords() {
-        try {
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+            List<Record> data = new ArrayList<>();
+            String fileName =  Configuration.instance.recordsFileName;
+
+            try {
+                BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName));
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    String[] strings = line.split(";");
+                    data.add(new Record(Integer.parseInt(strings[0]), strings[1],  strings[2], strings[3], Integer.parseInt(strings[4]), Integer.parseInt(strings[5]),  strings[6], strings[7]));
+
+                }
+            } catch (IOException ioe) {
+                System.out.println(ioe.getMessage());
+            }
+            return data;
     }
 
-    // count
+    /*
+        --- query 01 (count)
+        2 SELECT COUNT(*) FROM data
+        3 1000000
+         */
+    @Test
     public void executeSQL01() {
+
+        List<Record> records = loadRecords();
+        long count = records.stream().count();
+        
+        Assert.assertEquals("Count should be equal",1000000,  count);
     }
 
     /**
