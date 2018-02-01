@@ -41,8 +41,16 @@ public class Application {
         Assert.assertEquals("Count should be equal",1000000,  count);
     }
 
+    /**
+     * --- query 02 (count, where)
+     6 SELECT COUNT(*) FROM data WHERE source = 'a' AND destination = 'g'
+     7 AND type = 'n' AND weight >= 20 AND sorter <= 5
+     8 3123
+     */
     // count, where
     public void executeSQL02() {
+        List<Record> records = loadRecords();
+        Long count = records.stream().filter(record -> record.getSource() == "a" && record.getDestination() == "g").count();
     }
 
     /*

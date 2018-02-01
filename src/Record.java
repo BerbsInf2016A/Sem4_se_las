@@ -26,4 +26,36 @@ public class Record {
         stringBuilder.append(customs).append(";").append(extendedSecurityCheck);
         return stringBuilder.toString();
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public int getSorter() {
+        return sorter;
+    }
+
+    public String getCustoms() {
+        return customs;
+    }
+
+    public String getExtendedSecurityCheck() {
+        return extendedSecurityCheck;
+    }
 }
