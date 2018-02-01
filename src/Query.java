@@ -2,29 +2,25 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Query implements  IQuery {
-    @Override
-    public void executeSQL01() {
 
+    public long executeSQL01(List<Record> records) {
+        return 0;
     }
 
-    @Override
-    public void executeSQL02() {
-
+    public long executeSQL02(List<Record> records) {
+        return 0;
     }
 
-    @Override
-    public void executeSQL03() {
-
+    public long executeSQL03(List<Record> records) {
+        return 0;
     }
 
-    @Override
-    public void executeSQL04() {
-
+    public long executeSQL04(List<Record> records) {
+        return 0;
     }
 
-    @Override
-    public void executeSQL05() {
-
+    public List<Integer> executeSQL05(List<Record> records) {
+        return null;
     }
 
     public List<Integer> executeSQL06(List<Record> records) {

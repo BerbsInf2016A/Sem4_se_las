@@ -1,16 +1,16 @@
 import java.util.List;
 
 public interface IQuery {
-    void executeSQL01();
-    void executeSQL02();
-    void executeSQL03();
-    void executeSQL04();
-    void executeSQL05();
+    long executeSQL01(List<Record> records);
+    long executeSQL02(List<Record> records);
+    long executeSQL03(List<Record> records);
+    long executeSQL04(List<Record> records);
+    List<Integer> executeSQL05(List<Record> records);
     List<Integer> executeSQL06(List<Record> records);
-    void executeSQL07();
-    void executeSQL08();
-    void executeSQL09();
-    void executeSQL10();
-    void executeSQL11();
-    void executeSQL12();
+    void executeSQL07(List<Record> records);
+    void executeSQL08(List<Record> records);
+    void executeSQL09(List<Record> records);
+    void executeSQL10(List<Record> records);
+    void executeSQL11(List<Record> records);
+    void executeSQL12(List<Record> records);
 }
