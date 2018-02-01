@@ -142,8 +142,25 @@ public class Application {
         Assert.assertEquals("Results should be the same", expectedResult, result);
     }
 
+    /**
+     * --- query 07 (count, group by)
+     50 SELECT customs,COUNT(*) FROM data GROUP BY customs
+     51 n 899935
+     52 y 100065
+     */
     // count, group by
+    @Test
     public void executeSQL07() {
+        Map<String, Long> result = Query.instance.executeSQL07(this.loadRecords());
+
+        Map<String, Long> expectedResult = new HashMap<String, Long>()
+        {{
+            put("n", 899935L);
+            put("y", 100065L);
+        }};
+
+
+        Assert.assertEquals("Results should be the same", expectedResult, result);
     }
 
     /**
