@@ -9,22 +9,36 @@ import java.util.stream.Collectors;
 
 public class Application {
 
+
+    private static List<Record> cachedRecords;
+
+    private List<Record> copyRecordData() {
+        List<Record> newList = new ArrayList<>();
+        for(Record p : this.cachedRecords) {
+            newList.add(p.clone());
+        }
+        return newList;
+    }
+
     public List<Record> loadRecords() {
-            List<Record> data = new ArrayList<>();
-            String fileName =  Configuration.instance.recordsFileName;
 
-            try {
-                BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName));
-                String line;
-                while ((line = bufferedReader.readLine()) != null) {
-                    String[] strings = line.split(";");
-                    data.add(new Record(Integer.parseInt(strings[0]), strings[1],  strings[2], strings[3], Integer.parseInt(strings[4]), Integer.parseInt(strings[5]),  strings[6], strings[7]));
+        if (this.cachedRecords != null) return this.copyRecordData();
+        List<Record> data = new ArrayList<>();
+        String fileName =  Configuration.instance.recordsFileName;
 
-                }
-            } catch (IOException ioe) {
-                System.out.println(ioe.getMessage());
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName));
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] strings = line.split(";");
+                data.add(new Record(Integer.parseInt(strings[0]), strings[1],  strings[2], strings[3], Integer.parseInt(strings[4]), Integer.parseInt(strings[5]),  strings[6], strings[7]));
+
             }
-            return data;
+        } catch (IOException ioe) {
+            System.out.println(ioe.getMessage());
+        }
+        if (this.cachedRecords == null) this.cachedRecords = data;
+        return data;
     }
 
     /*
@@ -34,9 +48,7 @@ public class Application {
          */
     @Test
     public void executeSQL01() {
-
-        List<Record> records = loadRecords();
-        long count = records.stream().count();
+        long count = Query.instance.executeSQL01(loadRecords());
 
         Assert.assertEquals("Count should be equal",1000000,  count);
     }
@@ -50,15 +62,7 @@ public class Application {
     // count, where
     @Test
     public void executeSQL02() {
-        List<Record> records = loadRecords();
-        long count = records.stream()
-                .filter(record -> record.getSource().toLowerCase().equals("a"))
-                .filter(record -> record.getDestination().toLowerCase().equals("g"))
-                .filter(record -> record.getType().toLowerCase().equals("n"))
-                .filter(record -> record.getWeight() >= 20)
-                .filter(record -> record.getSorter() <= 5)
-                .count();
-
+        long count = Query.instance.executeSQL02(loadRecords());
         Assert.assertEquals("Count should be equal", 3123, count);
     }
 
@@ -70,13 +74,7 @@ public class Application {
      */
     @Test
     public void executeSQL03() {
-        List<Record> records = loadRecords();
-        long count = records.stream()
-                .filter(record -> record.getSource().toLowerCase().equals("a") || record.getSource().toLowerCase().equals("c"))
-                .filter(record -> record.getDestination().toLowerCase().equals("g"))
-                .filter(record -> record.getType().toLowerCase().equals("e"))
-                .filter(record -> record.getCustoms().toLowerCase().equals("y"))
-                .count();
+        long count = Query.instance.executeSQL03(loadRecords());
 
         Assert.assertEquals("Count should be equal",3136,  count);
     }
@@ -89,13 +87,8 @@ public class Application {
      */
     @Test
     public void executeSQL04() {
-        List<Record> records = loadRecords();
-        long count = records.stream()
-                .filter(record -> record.getSource().toLowerCase().equals("b"))
-                .filter(record -> !( record.getDestination().toLowerCase().equals("f") || record.getDestination().toLowerCase().equals("h") ) )
-                .filter(record -> record.getType().toLowerCase().equals("n"))
-                .filter(record -> record.getCustoms().toLowerCase().equals("n"))
-                .count();
+
+        long count = Query.instance.executeSQL04(loadRecords());
 
         Assert.assertEquals("Count should be equal",28246,  count);
     }
@@ -112,20 +105,7 @@ public class Application {
     @Test
     // id, where, in, order by desc limit
     public void executeSQL05() {
-        List<Record> records = loadRecords();
-        Comparator<Record> descendingByWeight = (Record record1, Record record2) -> (record2.getWeight() - record1.getWeight());
-
-        List<Integer> idsOrderByWeightDescendingLimit3 = records.stream()
-                .filter(record -> record.getSource().toLowerCase().equals("b") || record.getSource().toLowerCase().equals("c"))
-                .filter(record -> record.getDestination().toLowerCase().equals("g"))
-                .filter(record -> record.getType().toLowerCase().equals("n"))
-                .filter(record -> record.getSorter() <= 5)
-                .filter(record -> record.getCustoms().toLowerCase().equals("y"))
-                .filter(record -> record.getExtendedSecurityCheck().toLowerCase().equals("y"))
-                .sorted(descendingByWeight)
-                .map(record -> record.getId())
-                .limit(3)
-                .collect(Collectors.toList());
+        List<Integer> idsOrderByWeightDescendingLimit3 = Query.instance.executeSQL05(loadRecords());
 
         Assert.assertEquals("Elements should be the same with the same order",Arrays.asList(357530,59471,136168), idsOrderByWeightDescendingLimit3);
     }
@@ -154,7 +134,7 @@ public class Application {
      */
     @Test
     public void executeSQL06() {
-        List<Integer> result = new Query().executeSQL06(loadRecords());
+        List<Integer> result = Query.instance.executeSQL06(loadRecords());
 
         List<Integer> expectedResult = Arrays.asList(158036, 188829, 196332, 289290, 937204, 491565, 500654, 108316, 282370, 422002, 540879
                 ,563094, 625456, 685382, 252566, 495325);

@@ -2,25 +2,55 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Query implements  IQuery {
+    public static Query instance = new Query();
 
     public long executeSQL01(List<Record> records) {
-        return 0;
+        return records.stream().count();
     }
 
     public long executeSQL02(List<Record> records) {
-        return 0;
+        return records.stream()
+                .filter(record -> record.getSource().toLowerCase().equals("a"))
+                .filter(record -> record.getDestination().toLowerCase().equals("g"))
+                .filter(record -> record.getType().toLowerCase().equals("n"))
+                .filter(record -> record.getWeight() >= 20)
+                .filter(record -> record.getSorter() <= 5)
+                .count();
+
     }
 
     public long executeSQL03(List<Record> records) {
-        return 0;
+        return records.stream()
+                .filter(record -> record.getSource().toLowerCase().equals("a") || record.getSource().toLowerCase().equals("c"))
+                .filter(record -> record.getDestination().toLowerCase().equals("g"))
+                .filter(record -> record.getType().toLowerCase().equals("e"))
+                .filter(record -> record.getCustoms().toLowerCase().equals("y"))
+                .count();
     }
 
     public long executeSQL04(List<Record> records) {
-        return 0;
+        return records.stream()
+                .filter(record -> record.getSource().toLowerCase().equals("b"))
+                .filter(record -> !( record.getDestination().toLowerCase().equals("f") || record.getDestination().toLowerCase().equals("h") ) )
+                .filter(record -> record.getType().toLowerCase().equals("n"))
+                .filter(record -> record.getCustoms().toLowerCase().equals("n"))
+                .count();
     }
 
     public List<Integer> executeSQL05(List<Record> records) {
-        return null;
+        Comparator<Record> descendingByWeight = (Record record1, Record record2) -> (record2.getWeight() - record1.getWeight());
+
+        return records.stream()
+                .filter(record -> record.getSource().toLowerCase().equals("b") || record.getSource().toLowerCase().equals("c"))
+                .filter(record -> record.getDestination().toLowerCase().equals("g"))
+                .filter(record -> record.getType().toLowerCase().equals("n"))
+                .filter(record -> record.getSorter() <= 5)
+                .filter(record -> record.getCustoms().toLowerCase().equals("y"))
+                .filter(record -> record.getExtendedSecurityCheck().toLowerCase().equals("y"))
+                .sorted(descendingByWeight)
+                .map(record -> record.getId())
+                .limit(3)
+                .collect(Collectors.toList());
     }
 
     public List<Integer> executeSQL06(List<Record> records) {
@@ -46,32 +76,34 @@ public class Query implements  IQuery {
     }
 
     @Override
-    public void executeSQL07() {
+    public void executeSQL07(List<Record> records) {
+        
+    }
+
+    @Override
+    public void executeSQL08(List<Record> records) {
 
     }
 
     @Override
-    public void executeSQL08() {
+    public void executeSQL09(List<Record> records) {
 
     }
 
     @Override
-    public void executeSQL09() {
+    public void executeSQL10(List<Record> records) {
 
     }
 
     @Override
-    public void executeSQL10() {
+    public void executeSQL11(List<Record> records) {
 
     }
 
     @Override
-    public void executeSQL11() {
+    public void executeSQL12(List<Record> records) {
 
     }
 
-    @Override
-    public void executeSQL12() {
 
-    }
 }

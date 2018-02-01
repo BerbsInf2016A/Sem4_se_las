@@ -19,6 +19,12 @@ public class Record {
         this.extendedSecurityCheck = extendedSecurityCheck;
     }
 
+
+    public Record clone(){
+        Record r = new Record(this.id, this.source, this.destination, this.type, this.weight, this.sorter, this.customs, this.extendedSecurityCheck);
+        return r;
+    }
+
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(id).append(";").append(source).append(";").append(destination).append(";");
