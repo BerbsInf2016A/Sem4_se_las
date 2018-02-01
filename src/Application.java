@@ -59,10 +59,25 @@ public class Application {
     12 AND type = 'e' AND customs = 'y'
     13 3136
      */
+    @Test
     public void executeSQL03() {
+        List<Record> records = loadRecords();
+        long count = records.stream()
+                .filter(record -> record.getSource().toLowerCase().equals("a") || record.getSource().toLowerCase().equals("c"))
+                .filter(record -> record.getDestination().toLowerCase().equals("g"))
+                .filter(record -> record.getType().toLowerCase().equals("e"))
+                .filter(record -> record.getCustoms().toLowerCase().equals("y"))
+                .count();
+
+        Assert.assertEquals("Count should be equal",3136,  count);
     }
 
-    // count, where, not in
+    /*
+    --- query 04 (count, where, not in)
+    16 SELECT COUNT(*) FROM data WHERE source = 'b' AND destination NOT IN ('f','h')
+    17 AND type = 'n' AND customs = 'n'
+    18 28246
+     */
     public void executeSQL04() {
     }
 
