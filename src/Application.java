@@ -4,8 +4,8 @@ import org.junit.Test;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Application {
 
@@ -90,8 +90,33 @@ public class Application {
     public void executeSQL04() {
     }
 
+    /*
+     --- query 05 (id, where, in, order by desc limit)
+     21 SELECT id FROM data WHERE source IN ('b','c') AND destination = 'g' AND type = 'n'
+     22 AND sorter <= 5 AND customs = 'y' AND extendedSecurityCheck = 'y'
+     23 ORDER BY weight DESC LIMIT 3
+     24 357530
+     25 59471
+     26 136168
+     */
+    @Test
     // id, where, in, order by desc limit
     public void executeSQL05() {
+        List<Record> records = loadRecords();
+        Comparator<Record> descendingByWeight = (Record record1, Record record2) -> (record2.getWeight() - record1.getWeight());
+
+        List<Record> orderByWeight = records.stream()
+                .filter(record -> record.getSource().toLowerCase().equals("b") || record.getSource().toLowerCase().equals("c"))
+                .filter(record -> record.getDestination().toLowerCase().equals("g"))
+                .filter(record -> record.getType().toLowerCase().equals("n"))
+                .filter(record -> record.getSorter() <= 5)
+                .filter(record -> record.getCustoms().toLowerCase().equals("y"))
+                .filter(record -> record.getExtendedSecurityCheck().toLowerCase().equals("y"))
+                .collect(Collectors.toList());
+        Collections.sort(orderByWeight, descendingByWeight);
+        List<Integer> idsOrderByWeightDescLimit3 = orderByWeight.stream().map(record -> record.getId()).limit(3).collect(Collectors.toList());
+
+        Assert.assertEquals("Elements should be the same with the same order",Arrays.asList(357530,59471,136168), idsOrderByWeightDescLimit3);
     }
 
     // id, where, in, order by desc, order by asc
