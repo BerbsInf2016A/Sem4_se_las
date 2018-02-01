@@ -74,9 +74,20 @@ public class Query implements  IQuery {
                 .map(record -> record.getId()).collect(Collectors.toList());
     }
 
-    @Override
+    /**
+     * --- query 07 (count, group by)
+     50 SELECT customs,COUNT(*) FROM data GROUP BY customs
+     51 n 899935
+     52 y 100065
+     * @param records
+     * @return
+     */
     public Map<String, Long> executeSQL07(List<Record> records) {
-        return null;
+        Map<String, Long> result = new HashMap<>();
+        records.stream()
+                .collect(Collectors.groupingBy(Record::getCustoms))
+                .forEach((k, v) -> result.put(k, v.stream().count()));
+        return result;
     }
 
 
