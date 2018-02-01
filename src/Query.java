@@ -106,9 +106,29 @@ public class Query implements  IQuery {
         return result;
     }
 
-    @Override
-    public void executeSQL09(List<Record> records) {
+    /*
+   --- query 09 (count, where, in, group by)
+   75 SELECT destination,COUNT(*) FROM data WHERE source = 'c'
+   76 AND destination IN ('f','g','h') AND type = 'n' AND customs = 'y'
+   77 AND extendedSecurityCheck = 'n' GROUP BY destination
+   78 f 1513
+   79 h 1511
+   80 g 1498
+    */
+    public Map<String, Long> executeSQL09(List<Record> records) {
+        List<String> destinations = Arrays.asList("f", "g", "h");
 
+        Map<String, Long> result = new HashMap<>();
+        records.stream()
+                .filter(record -> record.getSource().toLowerCase().equals("c"))
+                .filter(record -> destinations.contains(record.getDestination().toLowerCase()))
+                .filter(record -> record.getType().toLowerCase().equals("n"))
+                .filter(record -> record.getCustoms().toLowerCase().equals("y"))
+                .filter(record -> record.getExtendedSecurityCheck().toLowerCase().equals("n"))
+                .collect(Collectors.groupingBy(Record::getDestination))
+                .forEach((k,v) -> result.put(k,v.stream().count()));
+
+        return result;
     }
 
     @Override

@@ -187,9 +187,18 @@ public class Application {
         Assert.assertEquals("Results should be the same", expectedResult, result);
     }
 
-    // count, where, in, group by
+    @Test
     public void executeSQL09() {
+        Map<String, Long> result = Query.instance.executeSQL09(this.loadRecords());
+
+        Map<String, Long> expected = new HashMap<>();
+        expected.put("f", 1513L);
+        expected.put("h", 1511L);
+        expected.put("g", 1498L);
+
+        Assert.assertEquals(expected, result);
     }
+
 
     // count, where, not in, group by
     public void executeSQL10() {
