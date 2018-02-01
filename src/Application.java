@@ -8,9 +8,15 @@ import java.util.*;
 
 public class Application {
 
-
+    /**
+     * The cached Records.
+     */
     private static List<Record> cachedRecords;
 
+    /**
+     * Copies the Records Data.
+     * @return The Copied Record Data.
+     */
     private List<Record> copyRecordData() {
         List<Record> newList = new ArrayList<>();
         for(Record p : this.cachedRecords) {
@@ -19,6 +25,10 @@ public class Application {
         return newList;
     }
 
+    /**
+     * Loads the records from the csv file.
+     * @return The Records.
+     */
     public List<Record> loadRecords() {
 
         if (this.cachedRecords != null) return this.copyRecordData();
@@ -41,7 +51,7 @@ public class Application {
     }
 
     /**
-     * --- query 01 (count)
+     --- query 01 (count)
      2 SELECT COUNT(*) FROM data
      3 1000000
      */
@@ -55,7 +65,7 @@ public class Application {
     }
 
     /**
-     * --- query 02 (count, where)
+     --- query 02 (count, where)
      6 SELECT COUNT(*) FROM data WHERE source = 'a' AND destination = 'g'
      7 AND type = 'n' AND weight >= 20 AND sorter <= 5
      8 3123
@@ -70,11 +80,11 @@ public class Application {
         Assert.assertEquals("Count should be equal", expected, result);
     }
 
-    /*
-    --- query 03 (count, where, in)
-    11 SELECT COUNT(*) FROM data WHERE source IN ('a','c') AND destination = 'g'
-    12 AND type = 'e' AND customs = 'y'
-    13 3136
+    /**
+     --- query 03 (count, where, in)
+     11 SELECT COUNT(*) FROM data WHERE source IN ('a','c') AND destination = 'g'
+     12 AND type = 'e' AND customs = 'y'
+     13 3136
      */
     @Test
     public void executeSQL03() {
@@ -85,11 +95,11 @@ public class Application {
         Assert.assertEquals("Count should be equal", expected, result);
     }
 
-    /*
-    --- query 04 (count, where, not in)
-    16 SELECT COUNT(*) FROM data WHERE source = 'b' AND destination NOT IN ('f','h')
-    17 AND type = 'n' AND customs = 'n'
-    18 28246
+    /**
+     --- query 04 (count, where, not in)
+     16 SELECT COUNT(*) FROM data WHERE source = 'b' AND destination NOT IN ('f','h')
+     17 AND type = 'n' AND customs = 'n'
+     18 28246
      */
     @Test
     public void executeSQL04() {
@@ -100,7 +110,7 @@ public class Application {
         Assert.assertEquals("Count should be equal", expected, result);
     }
 
-    /*
+    /**
      --- query 05 (id, where, in, order by desc limit)
      21 SELECT id FROM data WHERE source IN ('b','c') AND destination = 'g' AND type = 'n'
      22 AND sorter <= 5 AND customs = 'y' AND extendedSecurityCheck = 'y'
@@ -119,27 +129,27 @@ public class Application {
         Assert.assertEquals("Elements should be the same with the same order", expected, result);
     }
 
-    /*
-    --- query 06 (id, where, in, order by desc, order by asc)
-    29 SELECT id FROM data WHERE source IN ('a','d') AND destination IN ('f','e')
-    30 AND type = 'b' AND weight >= 29 AND customs = 'y' AND extendedSecurityCheck = 'y'
-    31 ORDER BY weight DESC, destination
-    32 158036
-    33 188829
-    34 196332
-    35 289290
-    36 937204
-    37 491565
-    38 500654
-    39 108316
-    40 282370
-    41 422002
-    42 540879
-    43 563094
-    44 625456
-    45 685382
-    46 252566
-    47 495325
+    /**
+     --- query 06 (id, where, in, order by desc, order by asc)
+     29 SELECT id FROM data WHERE source IN ('a','d') AND destination IN ('f','e')
+     30 AND type = 'b' AND weight >= 29 AND customs = 'y' AND extendedSecurityCheck = 'y'
+     31 ORDER BY weight DESC, destination
+     32 158036
+     33 188829
+     34 196332
+     35 289290
+     36 937204
+     37 491565
+     38 500654
+     39 108316
+     40 282370
+     41 422002
+     42 540879
+     43 563094
+     44 625456
+     45 685382
+     46 252566
+     47 495325
      */
     @Test
     public void executeSQL06() {
@@ -152,7 +162,7 @@ public class Application {
     }
 
     /**
-     * --- query 07 (count, group by)
+     --- query 07 (count, group by)
      50 SELECT customs,COUNT(*) FROM data GROUP BY customs
      51 n 899935
      52 y 100065
@@ -172,7 +182,7 @@ public class Application {
     }
 
     /**
-     * --- query 08 (count, where, group by)
+     --- query 08 (count, where, group by)
      55 SELECT sorter,COUNT(*) FROM data WHERE customs = 'y' AND extendedSecurityCheck = 'y'
      56 GROUP BY sorter
      57 1 257
@@ -212,6 +222,15 @@ public class Application {
         Assert.assertEquals("Results should be the same", expected, result);
     }
 
+    /**
+     --- query 09 (count, where, in, group by)
+     75 SELECT destination,COUNT(*) FROM data WHERE source = 'c'
+     76 AND destination IN ('f','g','h') AND type = 'n' AND customs = 'y'
+     77 AND extendedSecurityCheck = 'n' GROUP BY destination
+     78 f 1513
+     79 h 1511
+     80 g 1498
+     */
     @Test
     public void executeSQL09() {
         Map<String, Long> result = Query.instance.executeSQL09(this.loadRecords());
@@ -226,8 +245,8 @@ public class Application {
         Assert.assertEquals("Should be equal", expected, result);
     }
 
-    /*
-    82 --- query 10 (count, where, not in, group by)
+    /**
+    --- query 10 (count, where, not in, group by)
     83 SELECT extendedSecurityCheck,COUNT(*) FROM data WHERE source = 'a'
     84 AND destination = 'f' AND type NOT IN ('b','e') AND customs = 'n'
     85 AND sorter = 8 GROUP BY extendedSecurityCheck
@@ -273,13 +292,13 @@ public class Application {
         Assert.assertEquals("Results should be the same", expectedResult, result);
     }
 
-    /*
-   --- query 12 (avg, where, in, in, group by)
-   99 SELECT destination,AVG(weight) FROM data WHERE source IN ('a','b')
-   100 AND destination IN ('f','h') AND extendedSecurityCheck = 'n'
-   101 GROUP BY destination
-   102 h 18
-   103 f 19
+    /**
+     --- query 12 (avg, where, in, in, group by)
+     99 SELECT destination,AVG(weight) FROM data WHERE source IN ('a','b')
+     100 AND destination IN ('f','h') AND extendedSecurityCheck = 'n'
+     101 GROUP BY destination
+     102 h 18
+     103 f 19
     */
     @Test
     public void executeSQL12() {
