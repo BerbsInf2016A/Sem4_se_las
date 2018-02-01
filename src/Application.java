@@ -260,7 +260,14 @@ public class Application {
         Assert.assertEquals("Results should be the same", expectedResult, result);
     }
 
-    // avg, where, in, in, group by
+    /*
+   --- query 12 (avg, where, in, in, group by)
+   99 SELECT destination,AVG(weight) FROM data WHERE source IN ('a','b')
+   100 AND destination IN ('f','h') AND extendedSecurityCheck = 'n'
+   101 GROUP BY destination
+   102 h 18
+   103 f 19
+    */
     public void executeSQL12() {
     }
 

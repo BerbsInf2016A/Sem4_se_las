@@ -200,9 +200,27 @@ public class Query implements  IQuery {
         return result;
     }
 
-
+    /*
+    --- query 12 (avg, where, in, in, group by)
+    99 SELECT destination,AVG(weight) FROM data WHERE source IN ('a','b')
+    100 AND destination IN ('f','h') AND extendedSecurityCheck = 'n'
+    101 GROUP BY destination
+    102 h 18
+    103 f 19
+     */
     public Map<String, Integer> executeSQL12(List<Record> records) {
-        return null;
+        List<String> sources = Arrays.asList("a", "b");
+        List<String> destinations = Arrays.asList("f", "h");
+        Map<String, OptionalDouble> result = new HashMap<>();
+
+
+        records.stream()
+                .filter(record -> sources.contains(record.getSource().toLowerCase()))
+                .filter(record -> destinations.contains(record.getDestination().toLowerCase()))
+                .filter(record -> record.getExtendedSecurityCheck().toLowerCase().equals("n"))
+                .collect(Collectors.groupingBy(Record::getDestination))
+                .forEach((k, v) -> result.put(k, (v.stream().mapToDouble(record -> (record.getWeight())).average()));
+
     }
 
 
