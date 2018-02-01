@@ -48,9 +48,18 @@ public class Application {
      8 3123
      */
     // count, where
+    @Test
     public void executeSQL02() {
         List<Record> records = loadRecords();
-        Long count = records.stream().filter(record -> record.getSource() == "a" && record.getDestination() == "g").count();
+        long count = records.stream()
+                .filter(record -> record.getSource().toLowerCase().equals("a"))
+                .filter(record -> record.getDestination().toLowerCase().equals("g"))
+                .filter(record -> record.getType().toLowerCase().equals("n"))
+                .filter(record -> record.getWeight() >= 20)
+                .filter(record -> record.getSorter() <= 5)
+                .count();
+
+        Assert.assertEquals("Count should be equal", 3123, count);
     }
 
     // count, where, in
