@@ -8,10 +8,10 @@ public interface IQuery {
     long executeSQL04(List<Record> records);
     List<Integer> executeSQL05(List<Record> records);
     List<Integer> executeSQL06(List<Record> records);
-    void executeSQL07(List<Record> records);
-    void executeSQL08(List<Record> records);
+    Map<String, Long> executeSQL07(List<Record> records);
+    Map<String, Long> executeSQL08(List<Record> records);
     Map<String, Long> executeSQL09(List<Record> records);
-    void executeSQL10(List<Record> records);
+    Map<String, Long> executeSQL10(List<Record> records);
     void executeSQL11(List<Record> records);
     void executeSQL12(List<Record> records);
 }

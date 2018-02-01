@@ -108,8 +108,15 @@ public class Query implements  IQuery {
         return result;
     }
 
-    @Override
-    public void executeSQL10(List<Record> records) {
+    /*
+    --- query 10 (count, where, not in, group by)
+    83 SELECT extendedSecurityCheck,COUNT(*) FROM data WHERE source = 'a'
+    84 AND destination = 'f' AND type NOT IN ('b','e') AND customs = 'n'
+    85 AND sorter = 8 GROUP BY extendedSecurityCheck
+    86 n 2239
+    87 y 64
+     */
+    public Map<String, Long> executeSQL10(List<Record> records) {
 
     }
 
