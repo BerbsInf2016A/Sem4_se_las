@@ -37,7 +37,7 @@ public class Application {
 
         List<Record> records = loadRecords();
         long count = records.stream().count();
-        
+
         Assert.assertEquals("Count should be equal",1000000,  count);
     }
 
@@ -45,7 +45,12 @@ public class Application {
     public void executeSQL02() {
     }
 
-    // count, where, in
+    /*
+    --- query 03 (count, where, in)
+    11 SELECT COUNT(*) FROM data WHERE source IN ('a','c') AND destination = 'g'
+    12 AND type = 'e' AND customs = 'y'
+    13 3136
+     */
     public void executeSQL03() {
     }
 
