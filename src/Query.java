@@ -78,9 +78,32 @@ public class Query implements  IQuery {
         
     }
 
-    @Override
-    public void executeSQL08(List<Record> records) {
-
+    /**
+     * --- query 08 (count, where, group by)
+     55 SELECT sorter,COUNT(*) FROM data WHERE customs = 'y' AND extendedSecurityCheck = 'y'
+     56 GROUP BY sorter
+     57 1 257
+     58 11 252
+     59 6 255
+     60 5 263
+     61 12 231
+     62 9 255
+     63 2 270
+     64 4 254
+     65 7 248
+     66 8 257
+     67 3 230
+     68 10 244
+     * @param records
+     */
+    public Map<Integer, Long> executeSQL08(List<Record> records) {
+        Map<Integer, Long> result = new HashMap<>();
+        records.stream()
+                .filter(record -> record.getCustoms().toLowerCase().equals("y"))
+                .filter(record -> record.getExtendedSecurityCheck().toLowerCase().equals("y"))
+                .collect(Collectors.groupingBy(Record::getSorter))
+                .forEach((k, v) -> result.put(k, v.stream().count()));
+        return result;
     }
 
     @Override

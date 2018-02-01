@@ -146,8 +146,45 @@ public class Application {
     public void executeSQL07() {
     }
 
+    /**
+     * --- query 08 (count, where, group by)
+     55 SELECT sorter,COUNT(*) FROM data WHERE customs = 'y' AND extendedSecurityCheck = 'y'
+     56 GROUP BY sorter
+     57 1 257
+     58 11 252
+     59 6 255
+     60 5 263
+     61 12 231
+     62 9 255
+     63 2 270
+     64 4 254
+     65 7 248
+     66 8 257
+     67 3 230
+     68 10 244
+     */
     // count, where, group by
+    @Test
     public void executeSQL08() {
+        Map<Integer, Long> result = Query.instance.executeSQL08(loadRecords());
+
+        Map<Integer, Long> expectedResult = new HashMap<Integer, Long>()
+        {{
+            put(1, 257L);
+            put(11, 252L);
+            put(6, 255L);
+            put(5, 263L);
+            put(12, 231L);
+            put(9, 255L);
+            put(2, 270L);
+            put(4, 254L);
+            put(7, 248L);
+            put(8, 257L);
+            put(3, 230L);
+            put(10, 244L);
+        }};
+
+        Assert.assertEquals("Results should be the same", expectedResult, result);
     }
 
     // count, where, in, group by
