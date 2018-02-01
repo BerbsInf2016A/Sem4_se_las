@@ -281,7 +281,18 @@ public class Application {
    102 h 18
    103 f 19
     */
+    @Test
     public void executeSQL12() {
+        Map<String, Integer> result = Query.instance.executeSQL12(this.loadRecords());
+
+        Map<String, Integer> expectedResult = new HashMap<String, Integer>()
+        {{
+            put("h", 18);
+            put("f", 19);
+
+        }};
+
+        Assert.assertEquals("Results should be the same", expectedResult, result);
     }
 
     public void execute() {

@@ -211,16 +211,17 @@ public class Query implements  IQuery {
     public Map<String, Integer> executeSQL12(List<Record> records) {
         List<String> sources = Arrays.asList("a", "b");
         List<String> destinations = Arrays.asList("f", "h");
-        Map<String, OptionalDouble> result = new HashMap<>();
-
+        Map<String, Integer> result = new HashMap<>();
 
         records.stream()
                 .filter(record -> sources.contains(record.getSource().toLowerCase()))
                 .filter(record -> destinations.contains(record.getDestination().toLowerCase()))
                 .filter(record -> record.getExtendedSecurityCheck().toLowerCase().equals("n"))
                 .collect(Collectors.groupingBy(Record::getDestination))
-                .forEach((k, v) -> result.put(k, (v.stream().mapToDouble(record -> (record.getWeight())).average()));
+                .forEach((k, v) -> result.put(k, (int)(v.stream().mapToDouble(record -> (record.getWeight())).average().orElse(0))));
 
+
+        return result;
     }
 
 
